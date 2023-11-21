@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void imprimirArreglo(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int busquedaSecuencial(int arr[], int n, int elemento) {
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == elemento) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int busquedaBinaria(int arr[], int inicio, int fin, int elemento) {
+    while (inicio <= fin) {
+        int medio = inicio + (fin - inicio) / 2;
+        if (arr[medio] == elemento) {
+            return medio;
+        }
+        if (arr[medio] < elemento) {
+            inicio = medio + 1;
+        } else {
+            fin = medio - 1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    const int size = 50000;
+    int arreglo[size];
+
+    srand(time(NULL));
+
+    for (int i = 0; i < size; i++) {
+        arreglo[i] = i * 2;
+    }
+
+    const int numEjecuciones = 100000;
+    clock_t inicio, fin;
+    double tiempoTotal, tiempoPromedio, tiempoMinimo, tiempoMaximo;
+
+    
+    tiempoTotal = 0;
+    tiempoMinimo = __DBL_MAX__;
+    tiempoMaximo = 0;
+
+    for (int i = 0; i < numEjecuciones; i++) {
+        int elemento = rand() % (size * 2);
+
+        inicio = clock();
+        busquedaSecuencial(arreglo, size, elemento);
+        fin = clock();
+
+        double tiempoEjecucion = ((double)(fin - inicio) / CLOCKS_PER_SEC) * 1000;
+        tiempoTotal += tiempoEjecucion;
+
+        
+        if (tiempoEjecucion < tiempoMinimo) {
+            tiempoMinimo = tiempoEjecucion;
+        }
+        if (tiempoEjecucion > tiempoMaximo) {
+            tiempoMaximo = tiempoEjecucion;
+        }
+    }
+
+    tiempoPromedio = tiempoTotal / numEjecuciones;
+    printf("Busqueda Secuencial:\n");
+    printf("Tiempo promedio: %.5f ms\n", tiempoPromedio);
+    printf("Tiempo minimo: %.5f ms\n", tiempoMinimo);
+    printf("Tiempo maximo: %.5f ms\n", tiempoMaximo);
+
+    
+    tiempoTotal = 0;
+    tiempoMinimo = __DBL_MAX__;
+    tiempoMaximo = 0;
+
+    for (int i = 0; i < numEjecuciones; i++) {
+        int elemento = rand() % (size * 2);
+
+        inicio = clock();
+        busquedaBinaria(arreglo, 0, size - 1, elemento);
+        fin = clock();
+
+        double tiempoEjecucion = ((double)(fin - inicio) / CLOCKS_PER_SEC) * 1000;
+        tiempoTotal += tiempoEjecucion;
+
+        
+        if (tiempoEjecucion < tiempoMinimo) {
+            tiempoMinimo = tiempoEjecucion;
+        }
+        if (tiempoEjecucion > tiempoMaximo) {
+            tiempoMaximo = tiempoEjecucion;
+        }
+    }
+
+    tiempoPromedio = tiempoTotal / numEjecuciones;
+    printf("\nBusqueda Binaria:\n");
+    printf("Tiempo promedio: %.5f ms\n", tiempoPromedio);
+    printf("Tiempo minimo: %.5f ms\n", tiempoMinimo);
+    printf("Tiempo maximo: %.5f ms\n", tiempoMaximo);
+
+    return 0;
+}
+
