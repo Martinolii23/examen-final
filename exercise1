@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+
+void imprimirMatriz(int matriz[][30], int filas, int columnas) {
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            printf("%d ", matriz[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+void multiplicarMatrices(int matrizA[][30], int matrizB[][30], int resultado[][30], int filasA, int columnasA, int columnasB) {
+    for (int i = 0; i < filasA; i++) {
+        for (int j = 0; j < columnasB; j++) {
+            resultado[i][j] = 0;
+            for (int k = 0; k < columnasA; k++) {
+                resultado[i][j] += matrizA[i][k] * matrizB[k][j];
+            }
+        }
+    }
+}
+
+int main() {
+    clock_t tic = clock();
+    
+    int filasA = 30;
+    int columnasA = 30;
+    int filasB = 30;
+    int columnasB = 30;
+
+    
+    int matrizA[30][30];
+    int matrizB[30][30];
+    int resultado[30][30];
+
+   
+    srand(time(NULL));
+
+   
+    for (int i = 0; i < filasA; i++) {
+        for (int j = 0; j < columnasA; j++) {
+            matrizA[i][j] = rand() % 10;
+        }
+    }
+
+    for (int i = 0; i < filasB; i++) {
+        for (int j = 0; j < columnasB; j++) {
+            matrizB[i][j] = rand() % 10;
+        }
+    }
+
+    
+    printf("Matriz 1:\n");
+    imprimirMatriz(matrizA, filasA, columnasA);
+    printf("\nMatriz 2:\n");
+    imprimirMatriz(matrizB, filasB, columnasB);
+
+    
+    clock_t inicio = clock();
+
+    
+    multiplicarMatrices(matrizA, matrizB, resultado, filasA, columnasA, columnasB);
+	
+//	clock_t toc = clock();
+   // printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);
+  //  clock_t fin = clock();
+//   double tiempoEjecucion = ((double)(fin - inicio)  / CLOCKS_PER_SEC) ;
+//	printf("\nTiempo de ejecucion: %f milisegundos\n",((double)(fin - inicio) *1000 / CLOCKS_PER_SEC));
+    printf("\nResultados de la multiplicacion de matrices:\n");
+    imprimirMatriz(resultado, filasA, columnasB);
+ 	clock_t toc = clock();
+    printf("\n\nElapsed: %f milisegundos\n", (double)(toc - tic)*1000 / CLOCKS_PER_SEC);
+    
+ //printf("\nTiempo de ejecucion: %f milisegundos\n", tiempoEjecucion);
+
+    return 0;
+}
